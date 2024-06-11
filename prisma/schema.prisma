@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String   @id @default(uuid()) @map("_id")
+  name    String
+  auth0id String   @unique
+  avatar  Avatar
+  Upload  Upload[]
+}
+
+type Avatar {
+  url    String @default("https://kappa.lol/VcWLP.300x300x1.png")
+  width  Int    @default(128)
+  height Int    @default(128)
+}
+
+model Upload {
+  id         String   @id @default(uuid()) @map("_id")
+  deleteId   String
+  filename   String
+  extension  String
+  mimeType   String
+  author     User?    @relation(fields: [authorId], references: [id])
+  authorId   String
+  uploadedAt DateTime
+}
+
+model LocalUpload {
+  id         String   @id @default(uuid()) @map("_id")
+  deleteId   String
+  filename   String
+  extension  String
+  mimeType   String
+  localId    String
+  uploadedAt DateTime
+}

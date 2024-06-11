@@ -1,0 +1,47 @@
+import { TView } from "@/types";
+import clsx from "clsx";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { memo, useCallback } from "react";
+import ListIcon from "@/svg/align-left.svg";
+import GridIcon from "@/svg/grid.svg";
+
+type Props<T extends string> = {
+  className?: string;
+  value: T;
+  onChange: (value: T) => void;
+};
+const DataControls = <T extends string>({
+  className,
+  value,
+  onChange,
+}: Props<T>) => {
+  return (
+    <div className={clsx(className)}>
+      <ToggleGroup
+        type="single"
+        className="inline-flex"
+        onValueChange={onChange}
+        value={value}
+      >
+        <ToggleGroupItem value="list">
+          <ListIcon
+            className={clsx(
+              "w-4 h-4 ",
+              value === "list" ? "text-blue-500" : "text-gray"
+            )}
+          />
+        </ToggleGroupItem>
+
+        <ToggleGroupItem value="grid">
+          <GridIcon
+            className={clsx(
+              "w-4 h-4 ",
+              value === "grid" ? "text-blue-500" : "text-gray"
+            )}
+          />
+        </ToggleGroupItem>
+      </ToggleGroup>
+    </div>
+  );
+};
+export default DataControls;
