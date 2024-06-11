@@ -21,9 +21,7 @@ export default async function RootLayout({
 }: // upload,
 Readonly<{
   children: React.ReactNode;
-  // upload: React.ReactNode;
 }>) {
-  const user = await getUser();
   return (
     <html lang="en">
       <Providers>
@@ -35,7 +33,6 @@ Readonly<{
         >
           <Nav />
           {children}
-          {/* {upload} */}
         </body>
       </Providers>
     </html>

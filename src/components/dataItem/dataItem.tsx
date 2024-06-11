@@ -1,13 +1,15 @@
 "use client";
 import useHover from "@/hooks/useHover";
 import Image from "next/image";
-import MoreIcon from "@/svg/more-horizontal.svg";
+
 import { Upload } from "@/types";
 import { memo } from "react";
 import { Card } from "../ui/card";
 import { TView } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useNavigator from "@/hooks/useNavigator";
+import { Button } from "../ui/button";
+import DataDropdown from "./dataDropdown";
 type Props = { data: Upload; view: TView };
 
 const DataItem = ({ data, view = "grid" }: Props) => {
@@ -20,7 +22,7 @@ const DataItem = ({ data, view = "grid" }: Props) => {
     return (
       <div
         ref={ref}
-        className="grid w-full gap-4  grid-cols-[32px_1fr_128px_128px_24px] items-center justify-items-center"
+        className="grid w-full gap-4 px-4 py-2 grid-cols-[32px_1fr_128px_128px_24px] items-center justify-items-center bg-background hover:bg-accent transition-colors"
       >
         <Image
           className="w-8 h-8 rounded-sm object-cover"
@@ -35,15 +37,13 @@ const DataItem = ({ data, view = "grid" }: Props) => {
         </div>
         <p>{data.mimeType}</p>
         <p>{displayDate}</p>
-        <button>
-          <MoreIcon className="w-6 h-6 text-white" />
-        </button>
+        <DataDropdown data={data} />
       </div>
     );
 
   return (
     <Card
-      className="flex flex-col px-4 py-4  gap-2 rounded-md relative"
+      className="flex flex-col px-4 py-4  gap-2 rounded-md relative border-none bg-primary-foreground shadow-md"
       ref={ref}
     >
       <Image
@@ -59,11 +59,7 @@ const DataItem = ({ data, view = "grid" }: Props) => {
           {data.filename + data.extension}
         </p>
       </div>
-      {hover && (
-        <button className="absolute top-1 right-1 rounded-full bg-slate-200 w-5 h-5 flex items-center justify-center">
-          <MoreIcon className="w-4 h-4 text-blue-500" />
-        </button>
-      )}
+      {hover && <DataDropdown data={data} />}
     </Card>
   );
 };

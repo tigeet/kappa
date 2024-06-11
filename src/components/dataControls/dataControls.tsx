@@ -15,12 +15,16 @@ const DataControls = <T extends string>({
   value,
   onChange,
 }: Props<T>) => {
+  const handleChange = useCallback(
+    (value: T) => value && onChange(value),
+    [onChange]
+  );
   return (
     <div className={clsx(className)}>
       <ToggleGroup
         type="single"
         className="inline-flex"
-        onValueChange={onChange}
+        onValueChange={handleChange}
         value={value}
       >
         <ToggleGroupItem value="list">
