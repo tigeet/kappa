@@ -2,14 +2,14 @@
 import { ReactNode, memo, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "../ui/context-menu";
 import MoreIcon from "@/svg/more-horizontal.svg";
 import { TUpload } from "@/types";
 import { Copy, DeleteIcon, Download, Info, Trash } from "lucide-react";
@@ -20,10 +20,10 @@ import { download } from "@/lib/utils/download";
 type Props = {
   className?: string;
   data: TUpload;
-  trigger?: ReactNode;
+  children?: ReactNode;
 };
 
-const DataDropdown = ({ data, trigger }: Props) => {
+const DataContextMenu = ({ data, children }: Props) => {
   const copy = useClipboard();
 
   const handleCopyLink = useCallback(async () => {
@@ -35,43 +35,44 @@ const DataDropdown = ({ data, trigger }: Props) => {
     () => download(data.src, data.displayName),
     [data.displayName, data.src]
   );
+
   return (
-    <DropdownMenu>
-      {trigger}
+    <ContextMenu>
+      <ContextMenuTrigger>{children}</ContextMenuTrigger>
 
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel className=" text-nowrap overflow-hidden text-ellipsis">
+      <ContextMenuContent className="w-56">
+        <ContextMenuLabel className=" text-nowrap overflow-hidden text-ellipsis">
           {data.displayName}
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        </ContextMenuLabel>
+        <ContextMenuSeparator />
 
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={handleCopyLink}>
+        <ContextMenuGroup>
+          <ContextMenuItem onClick={handleCopyLink}>
             <Copy className="mr-2 h-4 w-4" />
             <span>Copy link</span>
-          </DropdownMenuItem>
+          </ContextMenuItem>
 
-          <DropdownMenuItem onClick={handleDownload}>
+          <ContextMenuItem onClick={handleDownload}>
             <Download className="mr-2 h-4 w-4" />
             <span>Download</span>
-          </DropdownMenuItem>
+          </ContextMenuItem>
 
-          <DropdownMenuItem disabled>
+          <ContextMenuItem disabled>
             <Info className="mr-2 h-4 w-4" />
             <span>Info</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
+          </ContextMenuItem>
+        </ContextMenuGroup>
 
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem disabled>
+        <ContextMenuSeparator />
+        <ContextMenuGroup>
+          <ContextMenuItem disabled>
             <Trash className="mr-2 h-4 w-4 text-destructive" />
             <span className="text-destructive">Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </ContextMenuItem>
+        </ContextMenuGroup>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 };
 
-export default memo(DataDropdown);
+export default memo(DataContextMenu);

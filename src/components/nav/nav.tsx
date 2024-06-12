@@ -28,12 +28,16 @@ const Nav = async () => {
           />
           <span>{user.name}</span>
           <a href="/api/auth/logout">
-            <Button className="h-8 w-16">Logout</Button>
+            <Button aria-label="logout button" className="h-8 w-16">
+              Logout
+            </Button>
           </a>
         </div>
       ) : (
         <a href="/api/auth/login">
-          <Button className="h-8 w-16">Login</Button>
+          <Button aria-label="login button" className="h-8 w-16">
+            Login
+          </Button>
         </a>
       )}
     </nav>

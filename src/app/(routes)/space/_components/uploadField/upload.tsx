@@ -37,7 +37,7 @@ export default function UploadField() {
       else await saveLocalUpload(localId, response);
       router.refresh();
     },
-    [cookieStore, user]
+    [cookieStore, router, user]
   );
 
   const handleClick = useCallback(() => {
@@ -95,7 +95,10 @@ export default function UploadField() {
         onDragEnter={handleDragStart}
         onDragOver={stopEvent}
       >
-        <div className="flex items-center flex-col gap-2">
+        <label
+          className="flex items-center flex-col gap-2"
+          htmlFor="upload field"
+        >
           <button aria-label="Upload Icon">
             <UploadIcon
               className={cn(
@@ -113,8 +116,10 @@ export default function UploadField() {
           >
             Drag an image here or upload a file
           </p>
-        </div>
+        </label>
         <input
+          aria-label="upload field"
+          name="upload field"
           type="file"
           className="opacity-0 absolute w-0 h-0"
           ref={inputRef}

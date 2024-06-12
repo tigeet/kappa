@@ -27,7 +27,7 @@ const DataControls = <T extends string>({
         onValueChange={handleChange}
         value={value}
       >
-        <ToggleGroupItem value="list">
+        <ToggleGroupItem value="list" aria-label="list view">
           <ListIcon
             className={clsx(
               "w-4 h-4 ",
@@ -36,7 +36,7 @@ const DataControls = <T extends string>({
           />
         </ToggleGroupItem>
 
-        <ToggleGroupItem value="grid">
+        <ToggleGroupItem value="grid" aria-label="grid view">
           <GridIcon
             className={clsx(
               "w-4 h-4 ",
