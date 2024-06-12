@@ -1,19 +1,9 @@
 "use server";
-import { User } from "@prisma/client";
-import { KappaResponse } from "./types";
 import prisma from "@/db/db";
-import getUser from "@/lib/utils/getUser";
 
-type Props = {
-  id: string;
-  filename: string;
-  extension: string;
-  deleteId: string;
-  uploadedAt: Date;
-  mimeType: string;
-};
-export const saveUpload = async (id: string, data: Props) => {
-  return await prisma.upload.create({
+import { ServiceUploadResponse } from "@/lib/upload/service";
+export const saveUpload = async (id: string, data: ServiceUploadResponse) => {
+  return await prisma.userUpload.create({
     data: {
       ...data,
       authorId: id,
@@ -21,7 +11,10 @@ export const saveUpload = async (id: string, data: Props) => {
   });
 };
 
-export const saveLocalUpload = async (id: string, data: Props) => {
+export const saveLocalUpload = async (
+  id: string,
+  data: ServiceUploadResponse
+) => {
   return await prisma.localUpload.create({
     data: {
       ...data,

@@ -1,7 +1,4 @@
-import {
-  LocalUpload as LocalPrismaUpload,
-  Upload as PrismaUpload,
-} from "@prisma/client";
+import { LocalUpload, UserUpload } from "@prisma/client";
 
-export type Upload = LocalUpload | PrismaUpload;
+export type TUpload = LocalUpload | UserUpload;
 export type TView = "list" | "grid";

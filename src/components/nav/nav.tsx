@@ -9,7 +9,13 @@ const Nav = async () => {
   return (
     <nav className=" flex-none h-12 flex gap-2 items-center px-4 justify-between shadow-md">
       <Link href="/">
-        <Image src="next-dark.svg" width={128} height={128} alt="Logo" />
+        <Image
+          src="next-dark.svg"
+          className="h-8"
+          width={128}
+          height={32}
+          alt="Logo"
+        />
       </Link>
       {user ? (
         <div className="flex gap-4 items-center">
@@ -21,14 +27,14 @@ const Nav = async () => {
             alt={`${user.name} profile picture`}
           />
           <span>{user.name}</span>
-          <Link href="/api/auth/logout">
+          <a href="/api/auth/logout">
             <Button className="h-8 w-16">Logout</Button>
-          </Link>
+          </a>
         </div>
       ) : (
-        <Link href="/api/auth/login">
+        <a href="/api/auth/login">
           <Button className="h-8 w-16">Login</Button>
-        </Link>
+        </a>
       )}
     </nav>
   );

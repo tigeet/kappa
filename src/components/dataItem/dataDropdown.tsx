@@ -11,31 +11,43 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import MoreIcon from "@/svg/more-horizontal.svg";
-import { Upload } from "@/types";
-import { Copy, DeleteIcon, Info, Trash } from "lucide-react";
+import { TUpload } from "@/types";
+import { Copy, DeleteIcon, Download, Info, Trash } from "lucide-react";
 import useClipboard from "@/hooks/useClipboard";
+import { cn } from "@/lib/utils";
+import { download } from "@/lib/utils/download";
 
 type Props = {
-  data: Upload;
+  className?: string;
+  data: TUpload;
 };
 
-const DataDropdown = ({ data }: Props) => {
+const DataDropdown = ({ data, className }: Props) => {
   const copy = useClipboard();
-  const handleCopyLink = useCallback(async () => {
-    const url = `https://kappa.lol/${data.id}${data.extension}`;
-    await copy(url);
-    toast.success("Link copied to clipboard");
-  }, [copy, data.extension, data.id]);
 
+  const handleCopyLink = useCallback(async () => {
+    await copy(data.src);
+    toast.success("Link copied to clipboard");
+  }, [copy, data.src]);
+
+  const handleDownload = useCallback(
+    () => download(data.src, data.displayName),
+    [data.displayName, data.src]
+  );
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center justify-center rounded-full p-0 w-8 h-8 hover:bg-accent-strong transition-colors focus:outline-border-primary focus:outline">
+      <DropdownMenuTrigger
+        className={cn(
+          className,
+          "flex items-center justify-center rounded-full p-0 w-8 h-8 hover:bg-accent-strong transition-colors focus:outline-border-primary focus:outline"
+        )}
+      >
         <MoreIcon className="w-4 h-4 text-primary " />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel className=" text-nowrap overflow-hidden text-ellipsis">
-          {data.filename + data.extension}
+          {data.displayName}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
@@ -43,6 +55,11 @@ const DataDropdown = ({ data }: Props) => {
           <DropdownMenuItem onClick={handleCopyLink}>
             <Copy className="mr-2 h-4 w-4" />
             <span>Copy link</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={handleDownload}>
+            <Download className="mr-2 h-4 w-4" />
+            <span>Download</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem disabled>

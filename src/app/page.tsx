@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
 const Page = async () => {
   return (
     <main className="flex flex-1 justify-center items-center">

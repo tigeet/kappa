@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { TView, Upload } from "@/types";
+import { TView, TUpload } from "@/types";
 import clsx from "clsx";
 import { memo, useState } from "react";
 import DataItem from "../dataItem/dataItem";
@@ -10,7 +10,7 @@ import useUrlState from "@/hooks/useUrlState";
 import { Separator } from "../ui/separator";
 type Props = {
   className?: string;
-  data: Upload[];
+  data: TUpload[];
 };
 
 const DataView = ({ className, data }: Props) => {

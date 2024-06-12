@@ -4,46 +4,40 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback, useRef, useState } from "react";
 import UploadIcon from "@/svg/upload.svg";
 import { saveLocalUpload, saveUpload } from "./actions";
-import { KappaResponse } from "./types";
-import { getLocalId } from "@/lib/utils/localId";
 import { Card } from "@/components/ui/card";
+import { useCookies } from "next-client-cookies";
 import { cn } from "@/lib/utils";
+import makeHex from "@/lib/utils/makeHex";
+import { service } from "@/lib/upload/service";
+import { useRouter } from "next/navigation";
 
 export default function UploadField() {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const cookieStore = useCookies();
 
   const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: async () => await getUser(),
   });
-
+  const router = useRouter();
   const onUpload = useCallback(
     async (files: FileList) => {
       const file = files[0];
       if (!file) return;
-      const formData = new FormData();
-      formData.append("file", file);
-      const uploadedAt = new Date();
-      const response = await fetch("https://kappa.lol/api/upload", {
-        method: "POST",
-        body: formData,
-      });
 
-      const jsonResponse: KappaResponse = await response.json();
-      console.log("@upload to kappa", jsonResponse);
-      const uploadData = {
-        filename: jsonResponse.name,
-        extension: jsonResponse.ext,
-        deleteId: jsonResponse.key,
-        id: jsonResponse.id,
-        mimeType: jsonResponse.type,
-        uploadedAt,
-      };
-      if (user) await saveUpload(user.id, uploadData);
-      else await saveLocalUpload(getLocalId(), uploadData);
+      const response = await service.upload(file);
+
+      if (!cookieStore.get("uid")) {
+        cookieStore.set("uid", makeHex(16));
+      }
+
+      const localId = cookieStore.get("uid")!;
+      if (user) await saveUpload(user.id, response);
+      else await saveLocalUpload(localId, response);
+      router.refresh();
     },
-    [user]
+    [cookieStore, user]
   );
 
   const handleClick = useCallback(() => {
@@ -90,7 +84,7 @@ export default function UploadField() {
   return (
     <Card
       className={cn(
-        "md:w-48 flex-none w-full relative cursor-pointer transition-colors",
+        "md:w-48 flex-none w-full relative cursor-pointer transition-colors hover:bg-accent",
         dragActive ? "bg-accent border-border-primary" : "bg-background"
       )}
       onClick={handleClick}
