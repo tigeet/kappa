@@ -7,25 +7,40 @@ import { Toaster } from "react-hot-toast";
 import UploadField from "./_components/uploadField/upload";
 import { useCallback, useState } from "react";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+
 type Props = {
   searchParams: Record<string, undefined | string | string[]>;
 };
 export default function Home({}: Props) {
   // const [page, setPage] = useState(0);
-  const { data, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const {
+    data,
+    isFetching,
+
+    hasPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+  } = useInfiniteQuery({
     queryKey: ["projects"],
     queryFn: async ({ pageParam }) => await getUploads(pageParam),
     initialPageParam: 0,
+    getPreviousPageParam: (lastPage) => lastPage.prevPage,
     getNextPageParam: (lastPage, pages) => lastPage.nextPage,
-    maxPages: 2,
+    maxPages: 3,
   });
 
-  const handleEnd = useCallback(async () => {
-    console.log("@onEnd");
+  const handleFetchNext = useCallback(async () => {
     if (isFetching) return;
     await fetchNextPage();
-    // setPage((page) => page + 1);
   }, [fetchNextPage, isFetching]);
+
+  const handleFetchPrev = useCallback(async () => {
+    if (isFetching) return;
+    await fetchPreviousPage();
+  }, [fetchPreviousPage, isFetching]);
+  console.log(!isFetching && hasPreviousPage);
+
   return (
     <main className="flex flex-1 overflow-hidden md:flex-row flex-col p-4 gap-4">
       <div className="flex flex-none md:h-full h-24">
@@ -34,8 +49,10 @@ export default function Home({}: Props) {
       <DataView
         className="flex-1"
         data={data?.pages.map((page) => page.data).flat() ?? []}
-        hasNext={hasNextPage}
-        onEnd={handleEnd}
+        hasNext={!isFetching && hasNextPage}
+        onFetchNext={handleFetchNext}
+        onFetchPrev={handleFetchPrev}
+        hasPrev={!isFetching && hasPreviousPage}
       />
       <Toaster position="top-right" />
     </main>

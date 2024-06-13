@@ -29,7 +29,10 @@ const DataItem = ({ data, view = "grid" }: Props) => {
             src={data.src}
             alt={data.displayName}
           />
-          <div className=" align-middle overflow-hidden w-full text-ellipsis whitespace-nowrap">
+          <div
+            className=" align-middle overflow-hidden w-full text-ellipsis whitespace-nowrap"
+            title={data.displayName}
+          >
             {data.displayName}
           </div>
           <p>{data.mimeType}</p>
@@ -63,7 +66,10 @@ const DataItem = ({ data, view = "grid" }: Props) => {
           alt={data.displayName}
         />
         <div className="flex flex-none items-center gap-2 w-full">
-          <p className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+          <p
+            className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
+            title={data.displayName}
+          >
             {data.displayName}
           </p>
 

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { service } from "@/lib/upload/service";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function UploadField() {
   const [dragActive, setDragActive] = useState(false);
@@ -13,10 +14,16 @@ export default function UploadField() {
   const router = useRouter();
   const onUpload = useCallback(
     async (files: FileList) => {
-      const file = files[0];
-      if (!file) return;
+      // const file = files[0];
+      // if (!file) return;
 
-      await service.upload(file);
+      // await service.upload(file);
+      // router.refresh();
+      const len = files.length;
+      const tasks: Promise<void>[] = [];
+      for (let i = 0; i < len; ++i) tasks.push(service.upload(files[i]));
+      await Promise.all(tasks);
+      toast.success(len === 1 ? `Uploaded one file` : `Uploaded ${len} files`);
       router.refresh();
     },
     [router]

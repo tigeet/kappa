@@ -15,6 +15,7 @@ const uploadService = KappaService;
 export const service = {
   async upload(file: File) {
     const response = await uploadService.upload(file);
+    console.log("@upload", response);
     await save(response);
   },
   async delete(id: string) {
