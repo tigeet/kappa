@@ -8,11 +8,11 @@ datasource db {
 }
 
 model User {
-  id      String       @id @default(uuid()) @map("_id")
+  id      String   @id @default(uuid()) @map("_id")
   name    String
-  auth0id String       @unique
+  auth0id String   @unique
   avatar  Avatar
-  Upload  UserUpload[]
+  Upload  Upload[]
 }
 
 type Avatar {
@@ -21,33 +21,28 @@ type Avatar {
   height Int    @default(128)
 }
 
-model UserUpload {
+model Upload {
   id          String        @id @default(uuid()) @map("_id")
-  deleteId    String
+  deleteId    String        @unique()
   filename    String
   displayName String
   extension   String
   mimeType    String
-  author      User?         @relation(fields: [authorId], references: [id])
-  authorId    String
   uploadedAt  DateTime
   src         String
   service     UploadService
+
+  type     UploadType
+  localId  String?
+  author   User?      @relation(fields: [authorId], references: [id])
+  authorId String?
+}
+
+enum UploadType {
+  BROWSER
+  AUTH
 }
 
 enum UploadService {
   KAPPA
-}
-
-model LocalUpload {
-  id          String        @id @default(uuid()) @map("_id")
-  deleteId    String
-  displayName String
-  filename    String
-  extension   String
-  mimeType    String
-  localId     String
-  uploadedAt  DateTime
-  src         String
-  service     UploadService
 }

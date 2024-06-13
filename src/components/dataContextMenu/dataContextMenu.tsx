@@ -16,6 +16,7 @@ import { Copy, DeleteIcon, Download, Info, Trash } from "lucide-react";
 import useClipboard from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
 import { download } from "@/lib/utils/download";
+import { service } from "@/lib/upload/service";
 
 type Props = {
   className?: string;
@@ -34,6 +35,11 @@ const DataContextMenu = ({ data, children }: Props) => {
   const handleDownload = useCallback(
     () => download(data.src, data.displayName),
     [data.displayName, data.src]
+  );
+
+  const handleDelete = useCallback(
+    async () => await service.delete(data.deleteId),
+    [data.deleteId]
   );
 
   return (
@@ -65,7 +71,7 @@ const DataContextMenu = ({ data, children }: Props) => {
 
         <ContextMenuSeparator />
         <ContextMenuGroup>
-          <ContextMenuItem disabled>
+          <ContextMenuItem onClick={handleDelete}>
             <Trash className="mr-2 h-4 w-4 text-destructive" />
             <span className="text-destructive">Delete</span>
           </ContextMenuItem>

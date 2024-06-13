@@ -35,6 +35,10 @@ export const KappaService: UploadService = {
   },
 
   async delete(id: string) {
-    throw Error("Kappa delete is not implemented yet");
+    const response = await fetch(`https://kappa.lol/api/delete?key=${id}`);
+    if (!response.ok) throw new Error("Failed to delete file");
+
+    const json = await response.json();
+    if (!json.success) throw new Error("Failed to delete file");
   },
 };

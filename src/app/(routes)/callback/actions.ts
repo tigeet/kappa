@@ -5,9 +5,7 @@ import { User } from "@prisma/client";
 
 export default async function createUserIfDoesNotExist(): Promise<null | User> {
   const session = await getSession();
-
   const auth0user = session?.user;
-
   if (!auth0user) return null;
 
   const dbUser = await prisma.user.findUnique({
