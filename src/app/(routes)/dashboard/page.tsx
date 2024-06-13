@@ -27,7 +27,7 @@ export default function Home({}: Props) {
     initialPageParam: 0,
     getPreviousPageParam: (lastPage) => lastPage.prevPage,
     getNextPageParam: (lastPage, pages) => lastPage.nextPage,
-    maxPages: 3,
+    maxPages: 2,
   });
 
   const handleFetchNext = useCallback(async () => {
@@ -39,7 +39,6 @@ export default function Home({}: Props) {
     if (isFetching) return;
     await fetchPreviousPage();
   }, [fetchPreviousPage, isFetching]);
-  console.log(!isFetching && hasPreviousPage);
 
   return (
     <main className="flex flex-1 overflow-hidden md:flex-row flex-col p-4 gap-4">
@@ -51,6 +50,7 @@ export default function Home({}: Props) {
         data={data?.pages.map((page) => page.data).flat() ?? []}
         hasNext={!isFetching && hasNextPage}
         onFetchNext={handleFetchNext}
+        isFetching={isFetching}
         onFetchPrev={handleFetchPrev}
         hasPrev={!isFetching && hasPreviousPage}
       />
